@@ -16,19 +16,18 @@ class Receive extends REST_Controller {
     //Menampilkan data supplier
     function index_get() {
         $status = $this->get('status_pembayaran');
-        $date = $this->get('tgl_transaksi');
-         $tgl_transaksi = date('Y-m-d', strtotime($date));
+        $tgl_transaksi = $this->get('tgl_transaksi');
 
-        // && $tgl_transaksi == ''
+        // 
 
-        if ($status== ''  ) {
+        if ($status== '' && $tgl_transaksi == '') {
             $receiveSupply = $this->db->get('tbl_receive_supply')->result();
         } 
-        //  else if($tgl_transaksi != null){
-        //     $this->db->where('tgl_transaksi', $tgl_transaksi);
-        //     $receiveSupply = $this->db->select_sum('total_harga_barang')->get('tbl_receive_supply')->result();
-        //     // var_dump($tgl_transaksi);
-        //  }
+         else if($tgl_transaksi){
+            $this->db->where('tgl_transaksi', $tgl_transaksi);
+            $receiveSupply = $this->db->select_sum('total_harga_barang')->get('tbl_receive_supply')->result();
+     
+         }
         else {
             $this->db->where('status_pembayaran', $status);
             $receiveSupply = $this->db->get('tbl_receive_supply')->result();
